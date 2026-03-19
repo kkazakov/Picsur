@@ -1,10 +1,8 @@
-import webpack from 'webpack';
-// import { BundleAnalyzerPlugin } from 'webpack-bundle-analyzer';
+const webpack = require('webpack');
 
-export default {
+module.exports = {
   plugins: [
     new webpack.ContextReplacementPlugin(/moment[\/\\]locale$/, /en/),
-    // new BundleAnalyzerPlugin(),
   ],
   module: {
     rules: [
