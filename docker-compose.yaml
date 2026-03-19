@@ -31,6 +31,9 @@ services:
       ## Warning: Verbose mode might log sensitive data
       # PICSUR_VERBOSE: "true"
     restart: unless-stopped
+    depends_on:
+      picsur_postgres:
+        condition: service_healthy
   picsur_postgres:
     image: postgres:17-alpine
     container_name: picsur_postgres
@@ -39,5 +42,10 @@ services:
       POSTGRES_PASSWORD: picsur
       POSTGRES_USER: picsur
     restart: unless-stopped
+    healthcheck:
+      test: ['CMD-SHELL', 'pg_isready -U picsur -d picsur']
+      interval: 5s
+      timeout: 5s
+      retries: 10
     volumes:
       - /storage-database:/var/lib/postgresql/data

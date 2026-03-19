@@ -17,7 +17,7 @@ import { EImage } from 'picsur-shared/dist/entities/image.entity';
 import { EUser } from 'picsur-shared/dist/entities/user.entity';
 
 import { HasFailed } from 'picsur-shared/dist/types/failable';
-import { UUIDRegex } from 'picsur-shared/dist/util/common-regex';
+import { ShortCodeRegex } from 'picsur-shared/dist/util/common-regex';
 import { ParseFileType } from 'picsur-shared/dist/util/parse-mime';
 import { Subscription, timer } from 'rxjs';
 import { ImageService } from '../../services/api/image.service';
@@ -107,7 +107,7 @@ export class ViewComponent implements OnInit, OnDestroy {
       const params = this.route.snapshot.paramMap;
 
       this.id = params.get('id') ?? '';
-      if (!UUIDRegex.test(this.id)) {
+      if (!ShortCodeRegex.test(this.id)) {
         return this.errorService.quitError('Invalid image link', this.logger);
       }
     }

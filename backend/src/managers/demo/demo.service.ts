@@ -21,7 +21,7 @@ export class DemoManagerService {
   }
 
   public execute() {
-    this.executeAsync().catch(this.logger.error);
+    this.executeAsync().catch(this.logger.error.bind(this.logger));
   }
 
   private async executeAsync() {

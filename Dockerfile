@@ -8,6 +8,7 @@ COPY pnpm-workspace.yaml package.json pnpm-lock.yaml ./
 COPY tsconfig.base.json ./
 COPY shared ./shared
 COPY backend ./backend
+COPY branding ./branding
 COPY frontend/tsconfig.base.json ./frontend/
 COPY frontend/custom-webpack.config.cjs ./frontend/
 COPY frontend ./frontend
@@ -21,9 +22,10 @@ RUN pnpm --filter picsur-backend build
 
 FROM node:20-alpine
 
+# sharp's prebuilt musl binaries require only these runtime libs.
+# Do NOT install system vips here - sharp ships its own libvips and using
+# SHARP_FORCE_GLOBAL_LIBVIPS with a mismatched Alpine vips version causes SIGABRT.
 RUN apk add --no-cache \
-    vips \
-    vips-dev \
     python3 \
     make \
     g++
@@ -31,7 +33,6 @@ RUN apk add --no-cache \
 RUN npm install -g pnpm
 
 ENV PICSUR_PRODUCTION=true
-ENV SHARP_FORCE_GLOBAL_LIBVIPS=1
 
 WORKDIR /picsur
 
@@ -47,7 +48,8 @@ COPY --from=builder /picsur/backend/dist ./backend/dist
 COPY --from=builder /picsur/shared/dist ./shared/dist
 COPY --from=builder /picsur/frontend/dist ./frontend/dist
 
-# Copy node_modules from builder (includes .pnpm store for symlinks)
-COPY --from=builder /picsur/node_modules ./node_modules
+# Install production dependencies inside Alpine so native addons (sharp, posix.js)
+# are downloaded/compiled for linux-musl, not copied from the glibc builder stage.
+RUN pnpm install --frozen-lockfile --shamefully-hoist --prod
 
 CMD ["pnpm", "--filter", "picsur-backend", "start:prod"]

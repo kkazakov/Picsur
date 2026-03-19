@@ -1,9 +1,9 @@
 import { z } from 'zod';
-import { IsEntityID } from '../validators/entity-id.validator.js';
+import { ShortCodeRegex } from '../util/common-regex.js';
 
 export const EImageSchema = z.object({
-  id: IsEntityID(),
-  user_id: IsEntityID(),
+  id: z.string().regex(ShortCodeRegex),
+  user_id: z.string().uuid(),
   created: z.preprocess((data: any) => new Date(data), z.date()),
   file_name: z.string(),
   expires_at: z.preprocess((data: any) => new Date(data), z.date()).nullable(),

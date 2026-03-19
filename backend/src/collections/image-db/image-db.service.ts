@@ -3,6 +3,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { AsyncFailable, Fail, FT } from 'picsur-shared/dist/types/failable';
 import { FindResult } from 'picsur-shared/dist/types/find-result';
 import { generateRandomString } from 'picsur-shared/dist/util/random';
+import { generateUniqueShortCode } from 'picsur-shared/dist/util/short-code';
 import { In, LessThan, Repository } from 'typeorm';
 import { EImageBackend } from '../../database/entities/images/image.entity.js';
 
@@ -25,6 +26,13 @@ export class ImageDBService {
     if (withDeleteKey) imageEntity.delete_key = generateRandomString(32);
 
     try {
+      const checkExists = async (code: string): Promise<boolean> => {
+        const count = await this.imageRepo.count({ where: { id: code } });
+        return count > 0;
+      };
+
+      imageEntity.id = await generateUniqueShortCode(6, checkExists, 3);
+
       imageEntity = await this.imageRepo.save(imageEntity, {
         reload: true,
       });

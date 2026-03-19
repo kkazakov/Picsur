@@ -1,21 +1,20 @@
-import { IsEntityID } from 'picsur-shared/dist/validators/entity-id.validator';
 import {
-    Column,
-    Entity,
-    Index,
-    JoinColumn,
-    ManyToOne,
-    PrimaryGeneratedColumn,
-    Unique,
+  Column,
+  Entity,
+  Index,
+  JoinColumn,
+  ManyToOne,
+  PrimaryGeneratedColumn,
+  Unique,
 } from 'typeorm';
 import * as z from 'zod';
 import { EUserBackend } from '../users/user.entity.js';
 
 export const EUsrPreferenceSchema = z.object({
-  id: IsEntityID().optional(),
+  id: z.string().uuid().optional(),
   key: z.string(),
   value: z.string(),
-  user_id: IsEntityID(),
+  user_id: z.string().uuid(),
 });
 type EUsrPreference = z.infer<typeof EUsrPreferenceSchema>;
 

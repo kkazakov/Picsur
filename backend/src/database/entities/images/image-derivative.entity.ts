@@ -1,11 +1,11 @@
 import {
-    Column,
-    Entity,
-    Index,
-    JoinColumn,
-    ManyToOne,
-    PrimaryGeneratedColumn,
-    Unique,
+  Column,
+  Entity,
+  Index,
+  JoinColumn,
+  ManyToOne,
+  PrimaryGeneratedColumn,
+  Unique,
 } from 'typeorm';
 import { EImageBackend } from './image.entity.js';
 
@@ -26,6 +26,8 @@ export class EImageDerivativeBackend {
 
   @Column({
     name: 'image_id',
+    type: 'varchar',
+    length: 6,
   })
   image_id: string;
 

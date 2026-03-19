@@ -2,8 +2,8 @@ import { z } from 'zod';
 import { EImageSchema } from '../../entities/image.entity.js';
 import { createZodDto } from '../../util/create-zod-dto.js';
 import { IsApiKey } from '../../validators/api-key.validator.js';
-import { IsEntityID } from '../../validators/entity-id.validator.js';
 import { IsPosInt } from '../../validators/positive-int.validator.js';
+import { ShortCodeRegex } from '../../util/common-regex.js';
 
 // Image upload
 export const ImageUploadResponseSchema = EImageSchema.extend({
@@ -66,7 +66,7 @@ export class ImageDeleteResponse extends createZodDto(
 
 // Image Delete with Key
 export const ImageDeleteWithKeyRequestSchema = z.object({
-  id: IsEntityID(),
+  id: z.string().regex(ShortCodeRegex),
   key: IsApiKey(),
 });
 export class ImageDeleteWithKeyRequest extends createZodDto(

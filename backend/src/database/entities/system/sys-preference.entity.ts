@@ -1,9 +1,8 @@
-import { IsEntityID } from 'picsur-shared/dist/validators/entity-id.validator';
 import { Column, Entity, Index, PrimaryGeneratedColumn } from 'typeorm';
 import * as z from 'zod';
 
 export const ESysPreferenceSchema = z.object({
-  id: IsEntityID().optional(),
+  id: z.string().uuid().optional(),
   key: z.string(),
   value: z.string(),
 });

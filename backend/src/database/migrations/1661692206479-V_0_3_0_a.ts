@@ -23,7 +23,7 @@ export class V030A1661692206479 implements MigrationInterface {
       `CREATE INDEX "IDX_d0500b00b0b4109b623f897c2d" ON "e_image_file_backend" ("variant") `,
     );
     await queryRunner.query(
-      `CREATE TABLE "e_image_backend" ("id" uuid NOT NULL DEFAULT uuid_generate_v4(), "user_id" character varying NOT NULL, "created" TIMESTAMP NOT NULL, CONSTRAINT "PK_5f7993001a7c82564ec5300540d" PRIMARY KEY ("id"))`,
+      `CREATE TABLE "e_image_backend" ("id" character varying(6) NOT NULL, "user_id" character varying NOT NULL, "created" TIMESTAMP NOT NULL, CONSTRAINT "PK_5f7993001a7c82564ec5300540d" PRIMARY KEY ("id"))`,
     );
     await queryRunner.query(
       `CREATE TABLE "e_role_backend" ("id" uuid NOT NULL DEFAULT uuid_generate_v4(), "name" character varying NOT NULL, "permissions" text array NOT NULL, CONSTRAINT "UQ_cbedb9f42a98a82d91422e7fedf" UNIQUE ("name"), CONSTRAINT "PK_af7ba6a46bf69a7b10c425f0367" PRIMARY KEY ("id"))`,

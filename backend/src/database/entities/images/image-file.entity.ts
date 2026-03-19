@@ -1,12 +1,12 @@
 import { ImageEntryVariant } from 'picsur-shared/dist/dto/image-entry-variant.enum';
 import {
-    Column,
-    Entity,
-    Index,
-    JoinColumn,
-    ManyToOne,
-    PrimaryGeneratedColumn,
-    Unique,
+  Column,
+  Entity,
+  Index,
+  JoinColumn,
+  ManyToOne,
+  PrimaryGeneratedColumn,
+  Unique,
 } from 'typeorm';
 import { EImageBackend } from './image.entity.js';
 
@@ -27,6 +27,8 @@ export class EImageFileBackend {
 
   @Column({
     name: 'image_id',
+    type: 'varchar',
+    length: 6,
   })
   image_id: string;
 

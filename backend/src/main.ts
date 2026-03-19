@@ -3,8 +3,8 @@ import multipart from '@fastify/multipart';
 import fastifyReplyFrom from '@fastify/reply-from';
 import { NestFactory } from '@nestjs/core';
 import {
-    FastifyAdapter,
-    NestFastifyApplication,
+  FastifyAdapter,
+  NestFastifyApplication,
 } from '@nestjs/platform-fastify';
 import { AppModule } from './app.module.js';
 import { HostConfigService } from './config/early/host.config.service.js';
@@ -34,11 +34,14 @@ async function bootstrap() {
   await fastifyAdapter.register(fastifyReplyFrom as any);
 
   // Create nest app
+  // Note: bufferLogs must be false so that initialization errors are visible
+  // in logs before the app aborts. When true, the error log is buffered and
+  // never flushed if NestFactory.create() throws.
   const app = await NestFactory.create<NestFastifyApplication>(
     AppModule,
     fastifyAdapter,
     {
-      bufferLogs: isProduction,
+      bufferLogs: false,
       autoFlushLogs: true,
     },
   );
@@ -58,4 +61,7 @@ async function bootstrap() {
   await app.listen(hostConfigService.getPort(), hostConfigService.getHost());
 }
 
-bootstrap().catch(console.error);
+bootstrap().catch((err) => {
+  console.error('Fatal error during bootstrap:', err);
+  process.exit(1);
+});

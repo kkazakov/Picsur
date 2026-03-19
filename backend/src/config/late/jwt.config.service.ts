@@ -9,7 +9,7 @@ export class JwtConfigService implements JwtOptionsFactory {
   private readonly logger = new Logger(JwtConfigService.name);
 
   constructor(private readonly prefService: SysPreferenceDbService) {
-    this.printDebug().catch(this.logger.error);
+    this.printDebug().catch(this.logger.error.bind(this.logger));
   }
 
   private async printDebug() {
