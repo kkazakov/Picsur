@@ -1,13 +1,8 @@
 #!/bin/bash
 
 set -e
-
 echo "Rebuilding and redeploying Picsur..."
-
-# Stop and remove containers
+docker-compose build
 docker-compose down
-
-# Rebuild and start containers
-docker-compose up -d --build
-
+docker-compose up -d
 echo "Done! Picsur is running at http://localhost:8080"
